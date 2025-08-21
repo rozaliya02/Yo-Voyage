@@ -1,11 +1,19 @@
 import React from "react";
-
+import { Header } from '../../../components'
 const Dashboard = () => {
+
+  const user = {
+    name: "John",
+  }
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
-      <p>Welcome to the admin dashboard!</p>
-    </div>
+    <main className="dashboard wrapper">
+      <Header title={`Welcome ${user?.name || 'Guest' }`}
+      description='Track your trips, manage bookings, and explore new destinations with ease.' /> 
+
+      Dashboard Page Component
+    </main>
+
+
   );
 }
 
