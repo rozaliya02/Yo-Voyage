@@ -1,6 +1,28 @@
 import { Outlet } from "react-router";
 import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
 import {NavItems, MobileSidebar} from "../../../components";
+import { account } from "~/appwrite/client";
+import { redirect } from "react-router";
+import { getExistingUser, storaUserData} from "~/appwrite/auth";
+
+
+export async function clientLoader() {
+    try{
+        const user = await account.get();
+        if(user.$id){
+            return redirect('/sign-in');
+        }
+
+        // const existinguser = await user.getExistingUser(user.$id);
+
+        // if(existinguser?.status === 'user'){
+        //     return redirect('/');
+        // }
+    } catch(e){
+        console.log( 'Error to fetch', e);
+    }
+}
+
 
 const AdminLayout = () => {
   return (

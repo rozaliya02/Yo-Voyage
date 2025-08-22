@@ -7,7 +7,7 @@ export const loginWithGoogle = async () => {
         await account.createOAuth2Session(OAuthProvider.Google);
     } catch (error) {
         console.error("Login with Google failed", error);
-        throw error;
+        
     }
 }
 
@@ -17,7 +17,7 @@ export const logout = async () => {
         return true;
     } catch (error) {
         console.error("Logout failed", error);
-        throw error;
+        return false;
     }
 }
 
@@ -38,7 +38,7 @@ export const getUser = async () => {
         );
     } catch (error) {
         console.error("Get current user failed", error);
-        throw error;
+       
     }
 }
 
@@ -62,7 +62,7 @@ try {
     );
 
     if (!response.ok) {
-        throw new Error("Failed to fetch Google picture");
+        console.log("Failed to fetch Google picture");
     }
 
     const data = await response.json();
@@ -73,7 +73,6 @@ try {
 }
     catch (error) {
         console.error("Get Google picture failed", error);
-        throw error;
     }
 }
 
@@ -110,6 +109,24 @@ export const storaUserData = async () => {
 
     } catch (error) {
         console.error("Store user data failed", error);
-        throw error;
+    }
+}
+
+export const getExistingUser = async (accountId: string) => {
+    try {
+        const {documents} = await database.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.usersCollectionId,
+            [Query.equal('accountId', [accountId])]
+        );
+
+        if(documents.length > 0) {
+            return documents[0];
+        }
+
+        return null;
+
+    } catch (error) {
+        console.error("Get existing user failed", error);
     }
 }
