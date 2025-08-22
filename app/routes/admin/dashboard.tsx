@@ -13,14 +13,13 @@ const Dashboard = () => {
 
         <section className="flex flex-col gap-6">
 
-          <div className="grid grid-cols-3 md-grid-cols-3 gap-6 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
             <StatsCard 
             headerTitle = 'Total Users'
             total = {totalUsers}
             currentMonthCount = {usersJoined.currentMonth}
             lastMonthCount = {usersJoined.lastMonth}
             />
-
               <StatsCard 
               headerTitle = 'Total Trips'
             total = {totalTrips}

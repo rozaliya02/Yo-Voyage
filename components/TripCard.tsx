@@ -5,7 +5,6 @@ import { cn } from "~/lib/utils";
 
 const TripCard = ({id, name, location, imageUrl, tags, estimatedPrice} : TripCardProps) => {
 const path = useLocation()
-console.log(id, name, location, imageUrl, tags, estimatedPrice);
   return (
     <Link to={path.pathname === '/' || path.pathname.startsWith('/travel') ? `/travel/${id}` : `/trips/${id}`} className="trip-card">
       <img src={imageUrl} alt={name} className="trip-card"/>
