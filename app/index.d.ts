@@ -80,7 +80,7 @@ declare interface TripCardProps {
   location: string;
   imageUrl: string;
   tags: string[];
-  price: string;
+  estimatedPrice: string;
 }
 
 declare interface StatsCard {
