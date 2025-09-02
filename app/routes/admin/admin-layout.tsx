@@ -3,7 +3,7 @@ import { SidebarComponent } from "@syncfusion/ej2-react-navigations";
 import {NavItems, MobileSidebar} from "../../../components";
 import { account } from "~/appwrite/client";
 import { redirect } from "react-router";
-import { getExistingUser, storaUserData} from "~/appwrite/auth";
+import { getExistingUser, storeUserData} from "~/appwrite/auth";
 
 
 export async function clientLoader() {
@@ -13,11 +13,11 @@ export async function clientLoader() {
             return redirect('/sign-in');
         }
 
-        // const existinguser = await user.getExistingUser(user.$id);
+        const existinguser = await user.getExistingUser(user.$id);
 
-        // if(existinguser?.status === 'user'){
-        //     return redirect('/');
-        // }
+        if(existinguser?.status === 'user'){
+            return redirect('/');
+        }
     } catch(e){
         console.log( 'Error to fetch', e);
     }

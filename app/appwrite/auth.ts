@@ -76,7 +76,7 @@ try {
     }
 }
 
-export const storaUserData = async () => {
+export const storeUserData = async () => {
     try {
         const user = await account.get();
 
@@ -128,5 +128,22 @@ export const getExistingUser = async (accountId: string) => {
 
     } catch (error) {
         console.error("Get existing user failed", error);
+    }
+}
+
+export const getAllUser = async (limit: number, offset: number) => {
+    try {
+        const {documents : users, total} = await database.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.usersCollectionId,
+            [Query.limit(limit), Query.offset(offset)]
+        )
+
+        if(total === 0) return {users: [], total}
+        
+        return {users, total}
+    } catch (e) {
+        console.log('Error fetching users' )
+        return {users: [], total: 0}
     }
 }
