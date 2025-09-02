@@ -15,7 +15,7 @@ const SignIn = () => {
                 <Link to="/">
                 <img src="assets/icons/logo.svg" alt="logo" className="size-[30]" />
                 </Link>
-                <h1 className='p-28-bold text-dark-100'>Yo!Voyage</h1>
+                <h1 className='p-28-bold text-dark-100'>Tourvisto</h1>
             </header>
             <article>
                 <h2 className='p-28-semibold text-dark-100 text-center'>Start your travel journey</h2>

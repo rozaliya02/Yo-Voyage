@@ -10,7 +10,7 @@ interface Props {
     ctaUrl?: string   
 }
 
-const Header = ({title, description, ctaText, ctaUrl}) => {
+const Header: React.FC<Props> = ({title, description, ctaText, ctaUrl}) => {
     const location = useLocation();
 
   return (
