@@ -1,10 +1,14 @@
-import { OAuthProvider, Query, ID } from 'appwrite';
+import { OAuthProvider, Query, ID, Permission, Role } from 'appwrite';
 import {account, appwriteConfig, database} from './client';
 import { redirect } from 'react-router';
 
 export const loginWithGoogle = async () => {
     try {
-        await account.createOAuth2Session(OAuthProvider.Google);
++        await account.createOAuth2Session(
+            OAuthProvider.Google,
+            `${window.location.origin}/dashboard`,
+            `${window.location.origin}/sign-in`
+        );
     } catch (error) {
         console.error("Login with Google failed", error);
         
@@ -24,23 +28,23 @@ export const logout = async () => {
 export const getUser = async () => {
     try {
         const user = await account.get();
-        if(!user) {
-            return redirect('/sign-in');
-        }
+        if (!user) return redirect("/sign-in");
 
-        const {documents} = await database.listDocuments(
+        const { documents } = await database.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.usersCollectionId,
             [
-                Query.equal('accountId', [user.$id]),
-                Query.select(['name', 'email', 'imageUrl', 'joinedAt', 'accountId'])
+                Query.equal("accountId", user.$id),
+                Query.select(["name", "email", "imageUrl", "joinedAt", "accountId"]),
             ]
         );
+
+        return documents.length > 0 ? documents[0] : redirect("/sign-in");
     } catch (error) {
-        console.error("Get current user failed", error);
-       
+        console.error("Error fetching user:", error);
+        return null;
     }
-}
+};
 
 export const getGooglePicture = async () => {
 try {
