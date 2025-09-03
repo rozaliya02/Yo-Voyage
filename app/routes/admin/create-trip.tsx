@@ -8,6 +8,7 @@ import { MapsComponent, LayersDirective, LayerDirective } from "@syncfusion/ej2-
 import { ButtonComponent } from "@syncfusion/ej2-react-buttons";
 import { world_map } from "~/constants/world_map";
 import { account } from "~/appwrite/client";
+import { useNavigate } from "react-router";
 
 export const loader = async () => {
     const response = await fetch('https://cdn.simplelocalize.io/public/v1/countries');
@@ -24,7 +25,7 @@ export const loader = async () => {
 
 const CreateTrip = ({loaderData} : Route.ComponentProps) => {
     const countries = loaderData as Country[];
-
+    const navigate  = useNavigate()
     const [formData, setFormData] = useState<TripFormData>({
         country: countries[0]?.value || '',
         travelStyle: '',
@@ -38,18 +39,17 @@ const CreateTrip = ({loaderData} : Route.ComponentProps) => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false)
 
-    const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        setLoading(true)
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+       e.preventDefault()
+        setLoading(true);
 
-        if(
+       if(
            !formData.country ||
            !formData.travelStyle ||
            !formData.interest ||
            !formData.budget ||
            !formData.groupType
-       )
-       {
+       ) {
            setError('Please provide values for all fields');
            setLoading(false)
            return;
@@ -60,42 +60,55 @@ const CreateTrip = ({loaderData} : Route.ComponentProps) => {
            setLoading(false)
            return;
        }
-
        const user = await account.get();
        if(!user.$id) {
-        console.error('User not authenticated');
-        setLoading(false)
-        return
+           console.error('User not authenticated');
+           setLoading(false)
+           return;
        }
 
        try {
-        console.log('user', user);
-        console.log('formData', formData);
-       }catch (e) {
-        console.error('Error generationg trip', e)
+           const response = await fetch('/api/create-trip', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json'},
+               body: JSON.stringify({
+                   country: formData.country,
+                   numberOfDays: formData.duration,
+                   travelStyle: formData.travelStyle,
+                   interests: formData.interest,
+                   budget: formData.budget,
+                   groupType: formData.groupType,
+                   userId: user.$id
+               })
+           })
+
+           const result: CreateTripResponse = await response.json();
+
+        if(result?.id) navigate(`/trips/${result.id}`)
+            else console.error('Failed to generate a trip')
+
+       } catch (e) {
+           console.error('Error generating trip', e);
        } finally {
-        setLoading(false)
+           setLoading(false)
        }
-       
-       }
+    };
 
-       const handleChange = (key: keyof TripFormData, value: string | number ) => {
-        setFormData({ ...formData, [key]: value})
-       }
-
+        const handleChange = (key: keyof TripFormData, value: string | number)  => {
+    setFormData({ ...formData, [key]: value})
+    }
     const countryData = countries.map((country) => ({
         text: country.name,
         value: country.value,
-        flagUrl: country.flagUrl
     }))
 
     const mapData = [
-       { country : formData.country,
-        color: '#EA382E',
-        coordinates: countries.find((c: Country) => c.name === formData.country)?.coordinates || [] 
+        {
+            country: formData.country,
+            color: '#EA382E',
+            coordinates: countries.find((c: Country) => c.name === formData.country)?.coordinates || []
         }
-]
-
+    ]
     return (
         <main className="flex flex-col gap-10 pb-20 wrapper">
             <Header title='Add new trips' description='View and generate AI travel plans'/>
