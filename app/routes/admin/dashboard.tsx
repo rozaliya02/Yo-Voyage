@@ -1,17 +1,17 @@
 import { Header, StatsCard, TripCard } from '../../../components';
 import { dashboardStats, allTrips } from "../../constants";
-import {getUser} from "../../appwrite/auth";
 import type { Route } from './+types/dashboard';
+
 
 const { totalUsers, usersJoined, totalTrips, tripsBooked, userRole } = dashboardStats;
  
-const Dashboard = ({ loaderData }: Route.ComponentProps) => {
+const Dashboard = () => {
     
-  const user = loaderData.user as User | null;
+  // const user = loaderData.user as User | null;
   
     return (
       <main className="dashboard wrapper">
-        <Header title={`Welcome ${user?.name || 'Guest' }`}
+        <Header title={`Welcome Guest`}
         description='Track your trips, manage bookings, and explore new destinations with ease.' /> 
 
         <section className="flex flex-col gap-6">

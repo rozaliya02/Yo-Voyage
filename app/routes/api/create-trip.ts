@@ -3,7 +3,6 @@ import {GoogleGenerativeAI} from "@google/generative-ai";
 import {parseMarkdownToJson, parseTripData} from "~/lib/utils";
 import {appwriteConfig, database} from "~/appwrite/client";
 import {ID} from "appwrite";
-import {createProduct} from "~/lib/stripe";
 import { error } from "console";
 
 export const action = async ({request} : ActionFunctionArgs) => {
@@ -83,7 +82,7 @@ export const action = async ({request} : ActionFunctionArgs) => {
 
         const result = await database.createDocument(
         appwriteConfig.databaseId,
-        appwriteConfig.tripsCollectionId,
+        appwriteConfig.tripCollectionId,
         ID.unique(),
         {
             tripDetail: JSON.stringify(trip),

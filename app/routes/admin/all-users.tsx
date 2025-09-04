@@ -1,20 +1,19 @@
-import { users } from '~/constants';
 import { Header } from '../../../components';
 import {GridComponent, ColumnsDirective, ColumnDirective} from "@syncfusion/ej2-react-grids"
 import { cn, formatDate } from '~/lib/utils';
-import { getAllUser } from '~/appwrite/auth';
+import { getAllUsers } from '~/appwrite/auth';
 import type { Route } from '../../routes/admin/+types/all-users';
 import { UserCircle } from "lucide-react";
 
 
 export const loader = async () => {
-  const {users, total} = await getAllUser(10, 0)
+  const {users, total} = await getAllUsers(10, 0)
 
   return {users, total};
 }
 
 const AllUsers = ({loaderData} : Route.ComponentProps) => {
-const {users} = loaderData
+const {users} = loaderData;
 
   return (
     <main className="all-users wrapper">
@@ -80,19 +79,11 @@ const {users} = loaderData
         )}
       />
       <span
-        className={cn(
-          "font-inter text-xs font-medium",
-          status === "user" ? "text-success-700" : "text-gray-600"
-        )}
-      >
-        {status}
-      </span>
-    </article>
+        className={cn("font-inter text-xs font-medium", status === "user" ? "text-success-700" : "text-gray-600" )}>{status}</span>
+      </article>
   )}
 />
-
-        </ColumnsDirective>
-        
+        </ColumnsDirective>  
       </GridComponent>
     </main>
   );
